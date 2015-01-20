@@ -63,6 +63,7 @@ struct cpufreq_interactive_cpuinfo {
 	u64 time_in_idle_timestamp;
 	u64 cputime_speedadj;
 	u64 cputime_speedadj_timestamp;
+        struct cpufreq_policy *policy;
 	unsigned int loadadjfreq;
 };
 
@@ -486,6 +487,8 @@ static void cpufreq_interactive_timer(unsigned long data)
 	spin_lock_irqsave(&ppol->target_freq_lock, flags);
 	cpu_load = loadadjfreq / ppol->policy->cur;
 	tunables->boosted = tunables->boost_val || now < tunables->boostpulse_endtime;
+
+	cpufreq_notify_utilization(pcpu->policy, cpu_load);
 
 	if (cpu_load >= tunables->go_hispeed_load || tunables->boosted) {
 		if (ppol->policy->cur < tunables->hispeed_freq &&
