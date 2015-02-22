@@ -37,6 +37,12 @@
 #define MIN_REFRESH_RATE 30
 #define DEFAULT_MDP_TRANSFER_TIME 14000
 
+#ifdef CONFIG_CPUFREQ_HARDLIMIT
+#ifndef CONFIG_POWERSUSPEND
+#include <linux/cpufreq_hardlimit.h>
+#endif
+#endif
+
 DEFINE_LED_TRIGGER(bl_led_trigger);
 
 void mdss_dsi_panel_pwm_cfg(struct mdss_dsi_ctrl_pdata *ctrl)
@@ -650,6 +656,14 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 		pr_err("%s: Invalid input data\n", __func__);
 		return -EINVAL;
 	}
+
+#ifdef CONFIG_CPUFREQ_HARDLIMIT
+#ifndef CONFIG_POWERSUSPEND
+	// Yank555.lu - Tell Hardlimit screen is being turned on
+	cpufreq_hardlimit_screen_on();
+#endif
+#endif
+
 #ifdef CONFIG_POWERSUSPEND
 	set_power_suspend_state_panel_hook(POWER_SUSPEND_INACTIVE);
 #endif
@@ -702,6 +716,14 @@ static int mdss_dsi_panel_off(struct mdss_panel_data *pdata)
 
 	if (ctrl->off_cmds.cmd_cnt)
 		mdss_dsi_panel_cmds_send(ctrl, &ctrl->off_cmds, CMD_REQ_COMMIT);
+
+#ifdef CONFIG_CPUFREQ_HARDLIMIT
+#ifndef CONFIG_POWERSUSPEND
+	// Yank555.lu - Tell Hardlimit screen is being turned off
+	cpufreq_hardlimit_screen_off();
+#endif
+#endif
+
 #ifdef CONFIG_POWERSUSPEND
 	set_power_suspend_state_panel_hook(POWER_SUSPEND_ACTIVE);
 #endif
