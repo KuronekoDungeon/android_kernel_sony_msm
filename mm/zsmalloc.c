@@ -1752,8 +1752,6 @@ unsigned long zs_compact(struct zs_pool *pool)
 		nr_migrated += __zs_compact(pool, class);
 	}
 
-	synchronize_rcu();
-
 	return nr_migrated;
 }
 EXPORT_SYMBOL_GPL(zs_compact);
