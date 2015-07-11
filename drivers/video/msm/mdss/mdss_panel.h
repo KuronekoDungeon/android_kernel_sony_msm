@@ -452,6 +452,10 @@ struct mdss_mdp_pp_tear_check {
 	u32 refx100;
 };
 
+#ifdef CONFIG_FB_MSM_MDSS_LIVEDISPLAY
+struct mdss_livedisplay_ctx;
+#endif
+
 struct mdss_panel_info {
 	u32 xres;
 	u32 yres;
@@ -546,6 +550,10 @@ struct mdss_panel_info {
 	int dsi_master;
 	int disp_on_in_hs;
 	int wait_time_before_on_cmd;
+#endif
+
+#ifdef CONFIG_FB_MSM_MDSS_LIVEDISPLAY
+	struct mdss_livedisplay_ctx *livedisplay;
 #endif
 };
 

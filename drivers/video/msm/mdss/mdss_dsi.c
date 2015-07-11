@@ -34,6 +34,10 @@
 #include "mdss_dsi.h"
 #include "mdss_debug.h"
 
+#ifdef CONFIG_FB_MSM_MDSS_LIVEDISPLAY
+#include "mdss_livedisplay.h"
+#endif
+
 #define XO_CLK_RATE	19200000
 
 static struct dsi_drv_cm_data shared_ctrl_data;
@@ -1021,6 +1025,10 @@ static int mdss_dsi_unblank(struct mdss_panel_data *pdata)
 		if (mdss_dsi_is_te_based_esd(ctrl_pdata))
 			enable_irq(gpio_to_irq(ctrl_pdata->disp_te_gpio));
 	}
+
+#ifdef CONFIG_FB_MSM_MDSS_LIVEDISPLAY
+	mdss_livedisplay_update(ctrl_pdata, MODE_UPDATE_ALL);
+#endif
 
 error:
 	mdss_dsi_clk_ctrl(ctrl_pdata, DSI_ALL_CLKS, 0);

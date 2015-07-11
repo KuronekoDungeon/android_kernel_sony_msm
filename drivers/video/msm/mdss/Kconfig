@@ -79,6 +79,13 @@ config FB_MSM_MDSS_KCAL_CTRL
 	---help---
 	  Enable sysfs for rgb/lut control for mdss-mdp display controllers
 	  in the MDSS sub-system.
+	
+config FB_MSM_MDSS_LIVEDISPLAY
+	depends on FB_MSM_MDSS
+	bool "LiveDisplay color temperature adjustment"
+	---help---
+	  Provide a simple color temperature adjustment interface via MDSS PCC.
+	  Provide hardware integration support for CABC, SRE, and CE.
 
 source "drivers/video/msm/mdss/somc_panel/Kconfig"
 source "drivers/video/msm/mdss/mhl_simg_sony/Kconfig"

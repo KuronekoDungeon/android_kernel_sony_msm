@@ -1157,5 +1157,8 @@ int mdss_mdp_cmd_set_autorefresh_mode(struct mdss_mdp_ctl *ctl,
 		int frame_cnt);
 int mdss_mdp_ctl_cmd_autorefresh_enable(struct mdss_mdp_ctl *ctl,
 		int frame_cnt);
+#ifdef CONFIG_FB_MSM_MDSS_LIVEDISPLAY
+int mdss_mdp_user_pcc_config(struct mdp_pcc_cfg_data *config);
+#endif
 
 #endif /* MDSS_MDP_H */
