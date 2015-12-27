@@ -1027,7 +1027,7 @@ static int mdss_dsi_unblank(struct mdss_panel_data *pdata)
 	}
 
 #ifdef CONFIG_FB_MSM_MDSS_LIVEDISPLAY
-	mdss_livedisplay_update(ctrl_pdata, MODE_UPDATE_ALL);
+	mdss_livedisplay_update(pdata->panel_info.livedisplay, MODE_UPDATE_ALL);
 #endif
 
 error:
