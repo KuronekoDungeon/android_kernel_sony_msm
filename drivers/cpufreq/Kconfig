@@ -126,6 +126,12 @@ config CPU_FREQ_DEFAULT_GOV_BARRY_ALLEN
 		  you to get a full dynamic cpu frequency capable system by simply
 		  loading your cpufreq low-level hardware driver, using the
 		  'barry_allen' governor for latency-sensitive workloads.
+	
+config CPU_FREQ_DEFAULT_GOV_RAGINGMOLASSES
+		bool "ragingmolasses"
+		select CPU_FREQ_GOV_RAGINMOLASSES
+		help
+		  Use the CPUFreq governor 'ragingmolasses' as default. Work in progress attempt at a good all around governor that can do either high performance or battery. Attempts to keep CPU away from max frequency as much as possible.
 		  
 endchoice
 
@@ -239,6 +245,15 @@ config CPU_FREQ_GOV_BARRY_ALLEN
 		  module will be called cpufreq_barry_allen.
 	
 		  For details, take a look at linux/Documentation/cpu-freq.
+	
+		  If in doubt, say N.
+	
+config CPU_FREQ_GOV_RAGINGMOLASSES
+		tristate "'RAGINGMOLASSES' cpufreq policy governor"
+		help
+		  'RAGINGMOLASSES' - This driver adds a cpufreq policy governor 
+		  much along the lines of ondemand but tries to keep to low 
+		  frequencies without hurting performance for workloads that need it. 
 	
 		  If in doubt, say N.
 		  
