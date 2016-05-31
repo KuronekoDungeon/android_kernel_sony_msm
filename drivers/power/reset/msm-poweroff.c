@@ -33,6 +33,11 @@
 #include <soc/qcom/restart.h>
 #include <soc/qcom/watchdog.h>
 
+#ifdef CONFIG_KEXEC_HARDBOOT
+#include <asm/kexec.h>
+#include <linux/mfd/pm8xxx/misc.h>
+#endif
+			
 #define EMERGENCY_DLOAD_MAGIC1    0x322A4F99
 #define EMERGENCY_DLOAD_MAGIC2    0xC67E4350
 #define EMERGENCY_DLOAD_MAGIC3    0x77777777
@@ -395,6 +400,26 @@ static struct notifier_block msm_reboot_notifier = {
 	.notifier_call = msm_reboot_call,
 };
 
+#ifdef CONFIG_KEXEC_HARDBOOT
+static void msm_kexec_hardboot_hook(void)
+{
+	set_dload_mode(0);
+
+	// Set PMIC to restart-on-poweroff
+	pm8xxx_reset_pwr_off(1);
+
+	// These are executed on normal reboot, but with kexec-hardboot,
+	// they reboot/panic the system immediately.
+#if 0
+	qpnp_pon_system_pwr_off(PON_POWER_OFF_WARM_RESET);
+
+	/* Needed to bypass debug image on some chips */
+	msm_disable_wdog_debug();
+	halt_spmi_pmic_arbiter();
+#endif
+}
+#endif
+
 static int msm_restart_probe(struct platform_device *pdev)
 {
 	struct device *dev = &pdev->dev;
@@ -488,6 +513,9 @@ static struct platform_driver msm_restart_driver = {
 
 static int __init msm_restart_init(void)
 {
+#if defined (CONFIG_KEXEC_HARDBOOT)
+	kexec_hardboot_hook = msm_kexec_hardboot_hook;
+#endif
 	return platform_driver_register(&msm_restart_driver);
 }
 device_initcall(msm_restart_init);

@@ -33,7 +33,7 @@
 #include <linux/workqueue.h>
 #include <linux/moduleparam.h>
 #include <asm/cputime.h>
-//#include <linux/earlysuspend.h>
+#include <linux/earlysuspend.h>
 
 
 /******************** Tunable parameters: ********************/
