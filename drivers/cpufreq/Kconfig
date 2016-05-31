@@ -133,6 +133,11 @@ config CPU_FREQ_DEFAULT_GOV_RAGINGMOLASSES
 		help
 		  Use the CPUFreq governor 'ragingmolasses' as default. Work in progress attempt at a good all around governor that can do either high performance or battery. Attempts to keep CPU away from max frequency as much as possible.
 		  
+config CPU_FREQ_DEFAULT_GOV_THUNDERX
+	bool "thunderx"
+	select CPU_FREQ_GOV_THUNDERX
+	help
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -267,6 +272,13 @@ config CPU_BOOST
 	  - Migration of important threads from one CPU to another.
 
 	  If in doubt, say N.
+
+config CPU_FREQ_GOV_THUNDERX
+  tristate "'thunderx' cpufreq governor"
+  depends on CPU_FREQ 
+  depends on EARLYSUSPEND
+  help
+    'thunderx' - a "power optimized" governor for Mediatek SoCs
 
 config GENERIC_CPUFREQ_CPU0
 	tristate "Generic CPU0 cpufreq driver"
