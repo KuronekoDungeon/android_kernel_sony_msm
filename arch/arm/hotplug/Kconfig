@@ -1,3 +1,5 @@
+menu "CPU Hotplug Drivers"
+
 config AUTOSMP
 			bool "Multi-core automatic hotplug support"
 			depends on SMP && HOTPLUG_CPU
@@ -5,3 +7,5 @@ config AUTOSMP
 			help
 			  Automatically hotplugs the multiple cpu cores on and off
 			  based on cpu load and suspend state
+
+endmenu
