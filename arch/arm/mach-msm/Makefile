@@ -112,3 +112,5 @@ obj-$(CONFIG_ARCH_MSM8974) += msm_mpmctr.o
 obj-$(CONFIG_PERFMAP) += perfmap.o
 
 obj-$(CONFIG_HAS_MACH_MEMUTILS) += memutils/
+
+obj-y += fastchg.o

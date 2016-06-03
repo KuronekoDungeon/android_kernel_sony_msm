@@ -52,6 +52,9 @@
 
 #include <linux/msm-bus.h>
 
+#include <linux/fastchg.h>
+#define USB_FASTCHG_LOAD 1000 /* uA */
+
 #define MSM_USB_BASE	(motg->regs)
 #define MSM_USB_PHY_CSR_BASE (motg->phy_csr_regs)
 
@@ -1941,6 +1944,9 @@ static void msm_otg_notify_charger(struct msm_otg *motg, unsigned mA)
 
 	if (motg->cur_power == mA)
 		return;
+
+	if (force_fast_charge)
+		mA = USB_FASTCHG_LOAD;
 
 	dev_info(motg->phy.dev, "Avail curr from USB = %u\n", mA);
 
