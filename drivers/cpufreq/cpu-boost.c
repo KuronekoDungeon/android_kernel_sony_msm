@@ -138,6 +138,16 @@ static const struct kernel_param_ops param_ops_input_boost_freq = {
 };
 module_param_cb(input_boost_freq, &param_ops_input_boost_freq, NULL, 0644);
 
+
+/* Get input_boost duration in uS */
+int get_input_boost_duration(void)
+{
+	return input_boost_ms * 1000;
+}
+
+unsigned int input_boost_freq = 1497600;
+//module_param(input_boost_freq, uint, 0644);
+
 /*
  * The CPUFREQ_ADJUST notifier is used to override the current policy min to
  * make sure policy min >= boost_min. The cpufreq framework then does the job
@@ -501,3 +511,6 @@ static int cpu_boost_init(void)
 	return 0;
 }
 late_initcall(cpu_boost_init);
+
+
+
