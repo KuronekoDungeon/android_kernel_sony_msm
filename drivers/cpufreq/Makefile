@@ -16,6 +16,7 @@ obj-$(CONFIG_CPU_FREQ_GOV_RAGINGMOLASSES) += cpufreq_ragingmolasses.o
 obj-$(CONFIG_CPU_FREQ_GOV_ALUCARD)	+= cpufreq_alucard.o
 obj-$(CONFIG_CPU_FREQ_GOV_IMPULSE)	+= cpufreq_impulse.o
 obj-$(CONFIG_CPU_FREQ_GOV_ZZMOOVE)	+= cpufreq_zzmoove.o
+obj-$(CONFIG_CPU_FREQ_GOV_THUNDERX)	+= cpufreq_thunderx.o
 obj-$(CONFIG_CPU_BOOST)			+= cpu-boost.o
 
 obj-$(CONFIG_GENERIC_CPUFREQ_CPU0)	+= cpufreq-cpu0.o
