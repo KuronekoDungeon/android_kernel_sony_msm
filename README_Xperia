@@ -1,5 +1,5 @@
 Configuration files can be found in arch/arm/configs.
-
+    Xperia Z1 Compact D5503                => rhine_amami_defconfig
     Xperia Z2 D6502/D6503/D6543/L50w       => shinano_sirius_defconfig
     Xperia Z2 Tablet SGP521/SGP541         => shinano_castor_defconfig
     Xperia Z2 Tablet SGP551                => shinano_castor_brazil_defconfig
