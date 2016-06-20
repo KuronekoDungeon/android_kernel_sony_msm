@@ -161,6 +161,11 @@ config CPU_FREQ_DEFAULT_GOV_THUNDERX
 		select CPU_FREQ_GOV_THUNDERX
 		help
 		  
+config CPU_FREQ_DEFAULT_GOV_BIOSHOCK
+		bool "bioshock"
+		select CPU_FREQ_GOV_BIOSHOCK
+		help
+		  
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -313,6 +318,13 @@ config CPU_FREQ_GOV_THUNDERX
 		  depends on POWERSUSPEND
 		  help
 		  	 'thunderx' - a "power optimized" governor for Mediatek SoCs
+		  
+
+config CPU_FREQ_GOV_BIOSHOCK
+		tristate "'bioshock' cpufreq bioshock"
+		depends on CPU_FREQ
+		help
+		  'bioshock' - More aggressive version of conservative
 		  
 config CPU_BOOST
 	tristate "Event base short term CPU freq boost"
