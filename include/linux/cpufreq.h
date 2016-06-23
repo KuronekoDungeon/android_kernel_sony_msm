@@ -448,9 +448,6 @@ extern struct cpufreq_governor cpufreq_gov_impulse;
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_ZZMOOVE)
 extern struct cpufreq_governor cpufreq_gov_zzmoove;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_zzmoove)
-#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_THUNDERX)
-extern struct cpufreq_governor cpufreq_gov_thunderx;
-#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_thunderx)
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_BIOSHOCK)
 extern struct cpufreq_governor cpufreq_gov_bioshock;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_bioshock)
