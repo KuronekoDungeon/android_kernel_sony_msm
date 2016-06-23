@@ -83,56 +83,31 @@ DEFINE_EVENT(loadeval, cpufreq_interactive_notyet,
 );
 
 TRACE_EVENT(cpufreq_interactive_boost,
-	    TP_PROTO(const char *s),
+	    TP_PROTO(char *s),
 	    TP_ARGS(s),
 	    TP_STRUCT__entry(
-		    __string(s, s)
+		    __field(char *, s)
 	    ),
 	    TP_fast_assign(
-		    __assign_str(s, s);
+		    __entry->s = s;
 	    ),
-	    TP_printk("%s", __get_str(s))
+	    TP_printk("%s", __entry->s)
 );
 
 TRACE_EVENT(cpufreq_interactive_unboost,
-	    TP_PROTO(const char *s),
+	    TP_PROTO(char *s),
 	    TP_ARGS(s),
 	    TP_STRUCT__entry(
-		    __string(s, s)
+		    __field(char *, s)
 	    ),
 	    TP_fast_assign(
-		    __assign_str(s, s);
+		    __entry->s = s;
 	    ),
-	    TP_printk("%s", __get_str(s))
-);
-
-TRACE_EVENT(cpufreq_interactive_load_change,
-	    TP_PROTO(unsigned long cpu_id),
-	    TP_ARGS(cpu_id),
-	    TP_STRUCT__entry(
-		__field(unsigned long, cpu_id)
-	    ),
-	    TP_fast_assign(
-		__entry->cpu_id = cpu_id;
-	    ),
-	    TP_printk("re-evaluate for cpu=%lu", __entry->cpu_id)
-);
-
-TRACE_EVENT(cpufreq_interactive_cpuload,
-	    TP_PROTO(unsigned long cpu_id, unsigned long load),
-	    TP_ARGS(cpu_id, load),
-	    TP_STRUCT__entry(
-		__field(unsigned long, cpu_id)
-		__field(unsigned long, load)
-	    ),
-	    TP_fast_assign(
-		__entry->cpu_id = cpu_id;
-		__entry->load = load;
-	    ),
-	    TP_printk("cpu=%lu load=%lu", __entry->cpu_id, __entry->load)
+	    TP_printk("%s", __entry->s)
 );
 
 #endif /* _TRACE_CPUFREQ_INTERACTIVE_H */
 
 /* This part must be outside protection */
 #include <trace/define_trace.h>
+
