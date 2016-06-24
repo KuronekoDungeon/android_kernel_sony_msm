@@ -55,13 +55,4 @@ config THUNDERPLUG_CONTROL
 		help
 		  This driver hotplugs cpu cores based on per-core load
 	
-
-config INTELLI_HOTPLUG
-	bool "Intelli hotplug driver"
-	depends on HOTPLUG_CPU
-	default y
-	help
-	  An intelligent cpu hotplug driver for
-	  Low Latency Frequency Transition capable processors.
-
 endmenu
