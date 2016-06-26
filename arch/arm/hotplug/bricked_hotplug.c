@@ -24,7 +24,7 @@
 #include <linux/module.h>
 #include <linux/device.h>
 #ifdef CONFIG_STATE_NOTIFIER
-#include <soc/qcom/state_notifier.h>
+#include <linux/state_notifier.h>
 #endif
 
 #include <linux/rq_stats.h>
