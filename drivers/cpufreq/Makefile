@@ -23,10 +23,10 @@ obj-$(CONFIG_CPU_FREQ_GOV_BLUACTIVE)	+= cpufreq_bluactive.o
 obj-$(CONFIG_CPU_FREQ_GOV_CONSERVATIVEX)	+= cpufreq_conservativex.o
 obj-$(CONFIG_CPU_BOOST)			+= cpu-boost.o
 obj-$(CONFIG_CPU_FREQ_GOV_PEGASUSQ)     += cpufreq_pegasusq.o
-obj-$(CONFIG_CPU_FREQ_GOV_YANKACTIVE)	+= cpufreq_yankactive.o
 
 # CPUfreq cross-arch helpers
 obj-$(CONFIG_CPU_FREQ_TABLE)		+= freq_table.o
+>>>>>>> 8a358cb... cpufreq: Bring Up PegasusQ Governor
 
 obj-$(CONFIG_GENERIC_CPUFREQ_CPU0)	+= cpufreq-cpu0.o
 
