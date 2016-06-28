@@ -18,18 +18,11 @@ static void fool(const char * name)
 	*(int*)0=0;
 }
 
-#define MAKE_FOOL(x) void x(void){fool(#x);}
+#define MAKE_FOOL(n) void n(void){fool(#n);}
+#define MAKE_FOOL_A(n, a) void n(a){fool(#n);}
 
 MAKE_FOOL(block_prepare_write);
-//MAKE_FOOL(block_sync_page);
-void block_sync_page(struct page *page)
-{
-	printk("fatal error: fool function %s called\n", "block_sync_page");
-	mdelay(1000);
-	BUG();
-	*(int*)0=0;
-}
-
+MAKE_FOOL_A(block_sync_page, struct page *page)
 MAKE_FOOL(create_proc_entry);
 MAKE_FOOL(d_alloc_anon);
 MAKE_FOOL(d_alloc_root);
@@ -48,7 +41,7 @@ MAKE_FOOL(__bug);
 MAKE_FOOL(_test_and_set_bit_le);
 MAKE_FOOL(_set_bit_le);
 
-#if defined(UFSD_BUILT_AS_MODULE)
+#ifdef CONFIG_UFSD_FS_MODULE
 MAKE_FOOL(posix_acl_from_xattr);
 MAKE_FOOL(posix_acl_valid);
 MAKE_FOOL(posix_acl_permission);
