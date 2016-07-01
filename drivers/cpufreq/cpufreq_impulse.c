@@ -23,8 +23,8 @@
 #include <linux/kthread.h>
 #include <linux/slab.h>
 #include <asm/cputime.h>
-#ifdef CONFIG_STATE_NOTIFIER
-#include <soc/qcom/state_notifier.h>
+#ifdef CONFIG_POWERSUSPEND
+#include <linux/powersuspend.h>
 #endif
 
 struct cpufreq_impulse_policyinfo {
@@ -70,6 +70,10 @@ static int set_window_count;
 static int migration_register_count;
 static struct mutex sched_lock;
 
+#ifdef CONFIG_POWERSUSPEND
+static struct power_suspend impulse_power_suspend_handler;
+static bool is_suspended = false;
+#endif
 /* Target load.  Lower values result in higher CPU speeds. */
 #define DEFAULT_TARGET_LOAD 90
 static unsigned int default_target_loads[] = {DEFAULT_TARGET_LOAD};
@@ -102,7 +106,7 @@ struct cpufreq_impulse_tunables {
 	 * The sample rate of the timer used to increase frequency
 	 */
 	unsigned long timer_rate;
-#ifdef CONFIG_STATE_NOTIFIER
+#ifdef CONFIG_POWERSUSPEND
 	unsigned long timer_rate_prev;
 #endif
 	/*
@@ -433,11 +437,11 @@ static void cpufreq_impulse_timer(unsigned long data)
 	spin_lock_irqsave(&ppol->load_lock, flags);
 	ppol->last_evaluated_jiffy = get_jiffies_64();
 
-#ifdef CONFIG_STATE_NOTIFIER
-	if (!state_suspended &&
+#ifdef CONFIG_POWERSUSPEND
+	if (!is_suspended &&
 		tunables->timer_rate != tunables->timer_rate_prev)
 		tunables->timer_rate = tunables->timer_rate_prev;
-	else if (state_suspended &&
+	else if (is_suspended &&
 		tunables->timer_rate != DEFAULT_TIMER_RATE_SUSP) {
 		tunables->timer_rate_prev = tunables->timer_rate;
 		tunables->timer_rate
@@ -502,8 +506,8 @@ static void cpufreq_impulse_timer(unsigned long data)
 #ifdef CONFIG_MSM_HOTPLUG
 	tunables->boosted = fast_lane_mode || tunables->boosted;
 #endif
-#ifdef CONFIG_STATE_NOTIFIER
-	tunables->boosted = tunables->boosted && !state_suspended;
+#ifdef CONFIG_POWERSUSPEND
+	tunables->boosted = tunables->boosted && !is_suspended;
 #endif
 	this_hispeed_freq = max(tunables->hispeed_freq, ppol->policy->min);
 
@@ -641,8 +645,8 @@ static int cpufreq_impulse_speedchange_task(void *data)
 
  			if (ppol->target_freq != ppol->policy->cur) {
 				tunables = ppol->policy->governor_data;
-#ifdef CONFIG_STATE_NOTIFIER
-				if (tunables->powersave_bias || state_suspended)
+#ifdef CONFIG_POWERSUSPEND
+				if (tunables->powersave_bias || is_suspended)
 #else
 				if (tunables->powersave_bias)
 #endif
@@ -971,7 +975,7 @@ static ssize_t store_timer_rate(struct cpufreq_impulse_tunables *tunables,
 		pr_warn("timer_rate not aligned to jiffy. Rounded up to %lu\n",
 			val_round);
 	tunables->timer_rate = val_round;
-#ifdef CONFIG_STATE_NOTIFIER
+#ifdef CONFIG_POWERSUSPEND
 	tunables->timer_rate_prev = val_round;
 #endif
 
@@ -984,7 +988,7 @@ static ssize_t store_timer_rate(struct cpufreq_impulse_tunables *tunables,
 		t = per_cpu(polinfo, cpu)->cached_tunables;
 		if (t && t->use_sched_load) {
 			t->timer_rate = val_round;
-#ifdef CONFIG_STATE_NOTIFIER
+#ifdef CONFIG_POWERSUSPEND
 			t->timer_rate_prev = val_round;
 #endif
 		}
@@ -1359,7 +1363,7 @@ static struct cpufreq_impulse_tunables *alloc_tunable(
 	tunables->ntarget_loads = ARRAY_SIZE(default_target_loads);
 	tunables->min_sample_time = DEFAULT_MIN_SAMPLE_TIME;
 	tunables->timer_rate = DEFAULT_TIMER_RATE;
-#ifdef CONFIG_STATE_NOTIFIER
+#ifdef CONFIG_POWERSUSPEND
 	tunables->timer_rate_prev = DEFAULT_TIMER_RATE;
 #endif
 	tunables->timer_slack_val = DEFAULT_TIMER_SLACK;
@@ -1545,6 +1549,9 @@ static int cpufreq_governor_impulse(struct cpufreq_policy *policy,
 		ppol->reject_notification = false;
 
 		mutex_unlock(&gov_lock);
+#ifdef CONFIG_POWERSUSPEND
+		register_power_suspend(&impulse_power_suspend_handler);
+#endif
 		break;
 
 	case CPUFREQ_GOV_STOP:
@@ -1561,6 +1568,9 @@ static int cpufreq_governor_impulse(struct cpufreq_policy *policy,
 		ppol->reject_notification = false;
 
 		mutex_unlock(&gov_lock);
+#ifdef CONFIG_POWERSUSPEND
+		unregister_power_suspend(&impulse_power_suspend_handler);
+#endif
 		break;
 
 	case CPUFREQ_GOV_LIMITS:
@@ -1601,6 +1611,18 @@ struct cpufreq_governor cpufreq_gov_impulse = {
 	.owner = THIS_MODULE,
 };
 
+#ifdef CONFIG_POWERSUSPEND
+static void impulse_power_suspend(struct power_suspend *h)
+{
+	is_suspended = true;
+}
+
+static void impulse_late_resume(struct power_suspend *h)
+{
+	is_suspended = false;
+}
+#endif
+
 static int __init cpufreq_impulse_init(void)
 {
 	struct sched_param param = { .sched_priority = MAX_RT_PRIO-1 };
@@ -1619,7 +1641,10 @@ static int __init cpufreq_impulse_init(void)
 
 	/* NB: wake up so the thread does not look hung to the freezer */
 	wake_up_process(speedchange_task);
-
+#ifdef CONFIG_POWERSUSPEND
+	impulse_power_suspend_handler.suspend = impulse_power_suspend;
+	impulse_power_suspend_handler.resume = impulse_late_resume;
+#endif
 	return cpufreq_register_governor(&cpufreq_gov_impulse);
 }
 
