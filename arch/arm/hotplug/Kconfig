@@ -1,13 +1,5 @@
 menu "CPU Hotplug Drivers"
 
-config AUTOSMP
-			bool "Multi-core automatic hotplug support"
-			depends on SMP && HOTPLUG_CPU
-			default n
-			help
-			  Automatically hotplugs the multiple cpu cores on and off
-			  based on cpu load and suspend state
-		
 config ZEN_DECISION
 		bool "Zen Decision: MSM Userspace Handler"
 		depends on SMP && FB
