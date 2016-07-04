@@ -1703,6 +1703,13 @@ config MODULE_FORCE_UNLOAD
 	  rmmod).  This is mainly for kernel developers and desperate users.
 	  If unsure, say N.
 
+config MODULE_IGNORE_VERMAGIC_MISMATCH
+	bool "Ignore vermagic mismatch"
+	default n
+	depends on MODULES
+	help
+	  Ignore vermagic mismatch when insert a module. Dangerous.
+
 config MODVERSIONS
 	bool "Module versioning support"
 	help
