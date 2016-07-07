@@ -121,7 +121,7 @@ Revision History:
 //
 // Force to activate trace
 //
-#define UFSD_TRACE
+//#define UFSD_TRACE
 
 #if !defined UFSD_DEBUG && !defined NDEBUG
   #define UFSD_DEBUG 1

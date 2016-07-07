@@ -41,6 +41,9 @@ MAKE_FOOL(__bug);
 MAKE_FOOL(_test_and_set_bit_le);
 MAKE_FOOL(_set_bit_le);
 
+MAKE_FOOL(jnl_op);
+MAKE_FOOL(mem_section);
+
 #ifdef CONFIG_UFSD_FS_MODULE
 MAKE_FOOL(posix_acl_from_xattr);
 MAKE_FOOL(posix_acl_valid);
