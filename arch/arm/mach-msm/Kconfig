@@ -1,3 +1,4 @@
+
 if ARCH_MSM
 
 menu "MSM SoC Type"
@@ -1194,6 +1195,13 @@ config MSM_UARTDM_Core_v14
 	depends on SERIAL_MSM_HS
 	help
 		Select if BLSP based UART Core v.14 or higher is present.
+
+config FORCE_FAST_CHARGE
+	bool "Force AC charge mode at will"
+	default y
+	help
+	  A simple sysfs interface to force adapters that
+	  are detected as USB to charge as AC.
 
 config KRAIT_REGULATOR
 	bool "Support Kraits powered via ganged regulators in the pmic"
