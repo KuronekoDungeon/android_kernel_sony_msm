@@ -686,6 +686,10 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 
 	if (on_cmds->cmd_cnt)
 		mdss_dsi_panel_cmds_send(ctrl, on_cmds, CMD_REQ_COMMIT);
+        
+#ifdef CONFIG_FB_MSM_MDSS_LIVEDISPLAY
+        mdss_livedisplay_update(ctrl, MODE_UPDATE_ALL);
+#endif
 
 end:
 	pinfo->blank_state = MDSS_PANEL_BLANK_UNBLANK;
